@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:wss="http://jax-ws.dev.java.net/spring/servlet"
+       xmlns:ws="http://jax-ws.dev.java.net/spring/core"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context.xsd
+            http://www.springframework.org/schema/aop
+            http://www.springframework.org/schema/aop/spring-aop.xsd
+            http://jax-ws.dev.java.net/spring/core
+            http://jax-ws.dev.java.net/spring/core.xsd
+            http://jax-ws.dev.java.net/spring/servlet
+            http://jax-ws.dev.java.net/spring/servlet.xsd
+            http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    
+    <context:annotation-config/>
+    <context:component-scan base-package="org.accenture.client.anaplan.camel.context"/>
+    
+   <camelContext id="camel5" xmlns="http://camel.apache.org/schema/spring">
+   
+   </camelContext>
+    
+    <bean id="jms" class="org.apache.camel.component.jms.JmsComponent">
+        <property name="connectionFactory">
+            <bean class="org.apache.activemq.ActiveMQConnectionFactory">
+                <property name="brokerURL" value="vm://localhost"></property>
+            </bean>
+        </property>
+    </bean>
+    
+</beans>

@@ -1,0 +1,22 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.accenture.client.anaplan.repository;
+
+import org.accenture.client.anaplan.entity.Entity;
+import org.accenture.client.anaplan.entity.Product;
+import org.springframework.stereotype.Component;
+
+/**
+ *
+ * @author prajwal.ravishankar
+ */
+@Component
+public class ProductRepository extends CrudRepository {
+    
+    public Entity findProductById(Integer id) {
+       return findById(Product.class, id);
+    }
+}

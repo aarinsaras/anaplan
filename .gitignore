@@ -1,0 +1,11 @@
+.gradle
+.nb-gradle
+private
+.nb-gradle-properties
+/ShoppingCatalog/build/
+/ShoppingCatalog/ShoppingCatalog.iml
+/ShoppingCatalog/ShoppingCatalog.ipr
+/ShoppingCatalog/ShoppingCatalog.iws
+/ShoppingCatalog/.classpath
+/ShoppingCatalog/.project
+/ShoppingCatalog/.settings/

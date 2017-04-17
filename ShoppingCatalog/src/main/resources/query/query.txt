@@ -1,0 +1,29 @@
+DROP KEYSPACE SHOPPINGCATALOG;
+
+CREATE KEYSPACE shoppingcatalog WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'}  AND durable_writes = true;
+
+USE shoppingcatalog;
+
+CREATE TABLE product (
+    productid int PRIMARY KEY,
+    category text,
+    productname text,
+    timestamp timestamp
+);
+
+CREATE TABLE customer (
+    custid int PRIMARY KEY,
+    custfname text,
+    custlname text,
+    custphone set<int>,
+    timestamp timestamp
+);
+
+create table customerorderproduct (
+	orderid int primary key,
+	custid int,
+	productid int,
+	orderplaceddate timestamp,
+	orderstate text,
+	noofitems int
+);

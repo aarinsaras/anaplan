@@ -1,0 +1,96 @@
+apply plugin: 'java'
+apply plugin : "war"
+apply plugin : "idea"
+apply plugin : "eclipse"
+sourceCompatibility = 1.7
+ext.springVersion = '3.2.4.RELEASE'
+repositories {
+    mavenCentral()
+  }
+  
+dependencies {
+    compile "com.datastax.cassandra:cassandra-driver-mapping:2.1.5"
+    compile "com.datastax.cassandra:cassandra-driver-core:3.1.4"
+    compile "com.google.guava:guava:18.0"
+    compile "org.slf4j:slf4j-api:1.7.7"
+    compile "com.codahale.metrics:metrics-core:3.0.2"
+    
+    
+    compile group: 'org.apache.camel', name: 'camel-core', version: '2.18.0'
+    compile group: 'org.apache.activemq', name: 'activemq-camel', version: '5.14.4'
+    compile "org.apache.activemq:activemq-kahadb-store:5.14.4"
+    
+    compile "org.springframework:spring-core:${springVersion}"
+    compile "org.springframework:spring-context:${springVersion}"
+    compile group: 'org.apache.camel', name: 'camel-spring', version: '2.18.0'
+    
+    compile "org.springframework.data:spring-data-cassandra:1.5.0.RELEASE"
+    compile group: 'org.springframework.data', name: 'spring-cql', version: '1.4.8.RELEASE'
+     
+    compile "org.springframework.boot:spring-boot-starter-parent:1.2.3.RELEASE"
+    compile "org.springframework.boot:spring-boot-starter-web:1.2.3.RELEASE"
+    
+    compile group: 'org.apache.commons', name: 'commons-csv', version: '1.1'
+   
+    compile group: 'com.google.code.gson', name: 'gson', version: '2.8.0'
+
+     //compile "org.springframework.boot:spring-boot-devtools:1.3.0.RELEASE"
+}
+
+task bootStart(type: JavaExec) {
+  //jvmArgs = ['-Xdebug', '-Xrunjdwp:server=y,transport=dt_socket,address=4000,suspend=y']  
+  classpath sourceSets.main.runtimeClasspath
+  main = "SpringBootApplicationExample"
+}
+
+/* task populateKeyspace() << {
+
+    def uri = "http://localhost:8080/keyspace/createKeySpaceAndTables"
+    println "Creating keyspaces"
+    
+   ["CREATE KEYSPACE shoppingcatalog WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'}  AND durable_writes = true;",
+   """CREATE TABLE shoppingcatalog.product (
+    productid int PRIMARY KEY,
+    category text,
+    productname text,
+    timestamp timestamp
+)"""]
+   .each {
+       def url = uri + "?query=" + URLEncoder.encode(it)
+        println "Loading " + url
+        try {
+            URL endpoint = new URL(url)
+            endpoint.text
+            endpoint.close()
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    
+    println "Creating Keyspace finished......."  
+}
+*/
+
+task processCsvMessages() << {
+    
+    println "Loading csv data into keyspaces"
+
+    def uri = "http://localhost:8080/processMessage/csv"
+  
+    [
+        ['src/main/resources/products', 'products.csv']:'productsCSVQueue', 
+        ['src/main/resources/customers', 'customers.csv']:'customersCSVQueue',
+        ['src/main/resources/customerorderproducts', 'customerorderproducts.csv']:'customerordersCSVQueue'
+    ]
+    .each {key, value ->
+        def url = uri + "?filePath=" + URLEncoder.encode(key[0])+ "&fileName="+ URLEncoder.encode(key[1]) +"&queueName="+URLEncoder.encode(value)
+        try {
+            new URL(url).text 
+            println url;
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    println "Flushed data into cassandra Successfully !!!"
+}
+
