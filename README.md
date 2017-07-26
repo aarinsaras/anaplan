@@ -1,4 +1,4 @@
 # anaplan
 Technology usage
-Java8
+Java9
 Jetty
