@@ -1,3 +1,3 @@
 # anaplan
 Technology usage
-Java8
+Java10
