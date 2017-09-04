@@ -2,4 +2,4 @@
 Technology usage
 Java10
 Jetty 6
-Idea
+Idea 12.3
